@@ -6,9 +6,9 @@ from pathlib import Path
 import threading
 
 class ConnectionHandler(threading.Thread):
-    def __init__(self, path: Path):
+    def __init__(self, config_pathname: Path):
         super().__init__()
-        self._path = path
+        self._config_pathname = config_pathname
         self._setup()
 
     def _setup(self):
@@ -23,22 +23,24 @@ class ConnectionHandler(threading.Thread):
         """
         Load connection configuration from YAML file.
         """
-        self._config = ConfigHandler(pathname=self._path)
+        self._config = ConfigHandler(config_pathname=self._config_pathname)
 
     def get_all_send_topics(self):
         """
         Get all topics send data from "topics_data/topics_send"
         """
-        raise NotImplementedError()
+        self._topics = []
 
     def run(self):
         """
         Start MQTT client connection
         """
+        self.get_all_send_topics()
         self.client_mqtt = MQTTClient(config=self._config, topics=self._topics)
 
     def stop(self):
         """
         Disconnect MQTT client
         """
-        self.client_mqtt.disconnect()
+        # self.client_mqtt.disconnect()
+        pass

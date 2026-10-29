@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from datetime import datetime, timezone
 
 class SensorData(BaseModel):
-    id_device: int = 0
+    id_device: str = ""
 
 class SensorRecord(BaseModel):
     id_measurement: int = 0

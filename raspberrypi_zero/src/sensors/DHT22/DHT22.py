@@ -3,7 +3,6 @@ from sensors.DHT22.DHT22_data.DHT22_data import DHT22Record
 from sensors.sensor.sensor import Sensor
 
 import adafruit_dht
-import logging
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -20,11 +19,14 @@ class DHT22(Sensor):
         """
         Load config file for DHT22 sensor from given pathname
         """
-        self._config = DHT22ConfigLoader(config_pathname=self.config_pathname)
-        self.id_device = self._config.id_device
+        try:
+            self.config = DHT22ConfigLoader(config_pathname=self.config_pathname)
+        except Exception as e:
+            self.logger.error(f"Could not open the config file for DHT22: {e}")
+            self.stop()
 
     def _setup_device(self):
-        self.device = adafruit_dht.DHT22(self._config.pin, use_pulseio=False)
+        self.device = adafruit_dht.DHT22(self.config.pin, use_pulseio=False)
 
     def read_temperature(self) -> float:
         return self.device.temperature

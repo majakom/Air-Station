@@ -6,9 +6,9 @@ import threading
 import importlib.util
 
 class Service(threading.Thread):
-    def __init__(self, connection_filename_config: Path):
+    def __init__(self, connection_config_pathname: Path):
         super().__init__()
-        self._connection_filename_config = connection_filename_config
+        self._connection_config_pathname = connection_config_pathname
         self._setup()
 
     def _setup(self):
@@ -59,14 +59,13 @@ class Service(threading.Thread):
 
             config_pathname = config_pathname_root / Path(f"{name}_config.yaml")
             self.sensors[name] = sensor_class(config_pathname=config_pathname)
-            break
 
     def run(self):
         """
         Run all sensors and MQTT communication
         """
         try:
-            self.newMQTTService = ConnectionHandler(config=self._connection_filename_config)
+            self.newMQTTService = ConnectionHandler(config_pathname=self._connection_config_pathname)
             self.newMQTTService.start()
         except Exception as e:
             self._logger.error(f"Could not start MQTT connection thread - {e}")

@@ -27,6 +27,7 @@ class SensorConfigLoader(ABC, threading.Thread):
         try:
             with self.config_pathname.open("r", encoding="utf-8") as f:
                 self.config = yaml.safe_load(f)
+                self.config = self.config["device"]
         except FileNotFoundError:
             self.logger.error(f"Config file {self.config_pathname} not found")
         except Exception as e:

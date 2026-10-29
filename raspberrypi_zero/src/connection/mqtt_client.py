@@ -16,7 +16,8 @@ class MQTTClient:
         self.run()
 
     def _logging_setup(self):
-        self.logger = logging.getLogger(__name__)
+        logging.basicConfig(level=logging.DEBUG)
+        self._logger = logging.getLogger(__name__)
 
     def run(self):
         """

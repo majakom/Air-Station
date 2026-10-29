@@ -19,8 +19,7 @@ class DHT22ConfigLoader(SensorConfigLoader):
         Load config for path "res/sensors/*.yaml"
         """
         try:
-            print(self.config)
-            self.dht22_data = DHT22Data(id_device=self.config["device"]["id_device"], pin=self.config["device"]["pin"])
+            self.dht22_data = DHT22Data(id_device=self.config["id_device"], pin=self.config["pin"])
             self.id_device = self.dht22_data.id_device
             self.pin = self.dht22_data.pin
         except Exception as e:

@@ -8,13 +8,13 @@ from dotenv import load_dotenv
 import os
 
 class ConfigHandler:
-    def __init__(self, pathname: Path):
-        self._pathname = pathname
+    def __init__(self, config_pathname: Path):
+        self.config_pathname = config_pathname
         self._setup()
 
     def _setup(self):
         self._setup_logging()
-        self._make_root()
+        self._config_pathname = self._make_root() / Path(self.config_pathname)
         self._load_config()
         self._load_env()
 
@@ -27,7 +27,7 @@ class ConfigHandler:
         Open config file from "res/connection/*.yaml"
         """
         try:
-            with self.config_path.open("r", encoding="utf-8") as f:
+            with self._config_pathname.open("r", encoding="utf-8") as f:
                 config = yaml.safe_load(f)
                 self.mqtt_data = MQTTData(host=config["mqtt_data"]["host"], port=config["mqtt_data"]["port"])
                 self.host = self.mqtt_data.host
@@ -48,6 +48,6 @@ class ConfigHandler:
         except Exception as e:
             self._logger.error(f"Error during reading .env file - {e}")
 
-    def _make_root(self):
-        root = Path(__file__).resolve().parent
-        self.config_path = root / Path("res") / Path("connection") / self._pathname # TODO: make static
+    def _make_root(self) -> Path:
+        root = Path(__file__).resolve().parent.parent.parent
+        return root / Path("res") / Path("connection")
