@@ -1,4 +1,4 @@
-from air_quality_data.air_quality_data import AirQualityData
+from sensors.air_quality.air_quality_data.air_quality_data import AirQualityData
 
 from pathlib import Path
 import yaml

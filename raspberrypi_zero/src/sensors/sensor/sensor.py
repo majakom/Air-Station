@@ -1,10 +1,12 @@
 import threading
 from abc import ABC, abstractmethod
 import logging
+from pathlib import Path
 
 class Sensor(ABC, threading.Thread):
-    def __init__(self):
+    def __init__(self, config_pathname: Path):
         super().__init__()
+        self.config_pathname = config_pathname
         self._setup_logging()
 
     @abstractmethod

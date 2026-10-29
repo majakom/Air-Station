@@ -1,11 +1,11 @@
-from config_handler import ConfigHandler
+from connection.config_handler import ConfigHandler
 
 import logging
 from typing import Any
 import paho.mqtt.client as mqtt
 import uuid
 
-class MQTTClient():
+class MQTTClient:
     def __init__(self, config: ConfigHandler, topics: list[Any]):
         self.config = config
         self.topics = topics

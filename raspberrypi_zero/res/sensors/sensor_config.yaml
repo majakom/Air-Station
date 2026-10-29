@@ -1,0 +1,9 @@
+#This a sensor config INSTRUCTION.
+
+#To add a new config for a new sensor you are required to create a .yaml file in current directory which is:
+#{device_name}/res/sensors/{sensor_name}_config.yaml
+#{device_name} -> for e.g. raspberrypi_zero
+#{sensor_name} -> for e.g. DHT22
+
+#Start with the following structure:
+#device:

@@ -1,10 +1,12 @@
-from sensor.sensor_data.sensor_data import *
+from sensors.sensor.sensor_data.sensor_data import *
 
 from dataclasses import dataclass
+
 @dataclass
 class AirQualityData(SensorData):
     pin: int = 0 
 
 @dataclass
 class AirQualityRecord(SensorRecord):
-    raise NotImplemented
+    #TODO: research this sensor TMP:
+    co2: int = 0

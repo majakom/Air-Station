@@ -1,5 +1,5 @@
-from config_handler import ConfigHandler
-from mqtt_client import MQTTClient
+from connection.config_handler import ConfigHandler
+from connection.mqtt_client import MQTTClient
 
 import logging
 from pathlib import Path

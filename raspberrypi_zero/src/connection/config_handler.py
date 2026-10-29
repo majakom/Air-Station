@@ -1,5 +1,5 @@
-from connection_data.mqtt_data import MQTTData
-from connection_data.credentials_data import CredentialsData
+from connection.connection_data.mqtt_data import MQTTData
+from connection.connection_data.credentials_data import CredentialsData
 
 from pathlib import Path
 import logging

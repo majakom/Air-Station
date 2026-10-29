@@ -1,2 +1,3 @@
 device:
-  pin: 1    
+  id_device: "DHT22"
+  pin: board.D4

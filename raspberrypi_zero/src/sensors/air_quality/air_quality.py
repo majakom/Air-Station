@@ -1,5 +1,5 @@
-from air_quality_config_loader import AirQualityConfigLoader
-from sensor.sensor import Sensor
+from sensors.air_quality.air_quality_config_loader import AirQualityConfigLoader
+from sensors.sensor.sensor import Sensor
 
 import logging
 from pathlib import Path

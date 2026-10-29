@@ -20,11 +20,18 @@ class Service(threading.Thread):
         self._logger = logging.getLogger(__name__)
 
     @staticmethod
-    def _make_root(folder_name: str) -> Path:
+    def _make_root_sensors() -> Path:
         """
         Find root for given folder_name
         """
-        return Path(__file__).parent / Path(folder_name)
+        return Path(__file__).parent / Path('sensors')
+
+    @staticmethod
+    def _make_root_config() -> Path:
+        """
+        Find root for res/sensors/ with {sensor_name}_config.yaml files inside
+        """
+        return Path(__file__).parent.parent / 'res' / 'sensors'
 
     def _find_all_sensors(self):
         """
@@ -33,23 +40,26 @@ class Service(threading.Thread):
         where {name} is a name of a sensor
         In {name}.py put class names {Name} starting with a capital letter
         """
-        _sensor_root = self._make_root(folder_name= 'sensors')
+        _sensor_root = self._make_root_sensors()
 
         self.sensors = {}
         for folder in _sensor_root.iterdir():
-            if folder.is_dir():
-                self.sensors[folder.name] = _sensor_root / Path(folder.name) / Path(f"{folder.name}.py")
+            folder_name = folder.name
+            if folder.is_dir() and folder_name != 'sensor' and not folder_name.startswith('__'):
+                self.sensors[folder_name] = _sensor_root / Path(folder_name) / Path(f"{folder_name}.py")
 
+        config_pathname_root = self._make_root_config()
         for name, file_path in self.sensors.items():
             spec = importlib.util.spec_from_file_location(name, file_path)
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
-
-            class_name = name.capitalize()
+            class_name = name if name.isupper() else name.title()
             class_name = class_name.replace("_", "")
             sensor_class = getattr(module, class_name)
 
-            self.sensors[name] = sensor_class
+            config_pathname = config_pathname_root / Path(f"{name}_config.yaml")
+            self.sensors[name] = sensor_class(config_pathname=config_pathname)
+            break
 
     def run(self):
         """
@@ -64,7 +74,7 @@ class Service(threading.Thread):
         for name, sensor_class in self.sensors.items():
             try:
                 self._logger.info(f"Running sensor {name}")
-                self.sensors[name] = sensor_class().start()
+                self.sensors[name] = sensor_class.start()
             except Exception as e:
                 self._logger.error(f"Could not start sensor class thread: {name} - {e}")
 
